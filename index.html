@@ -22,9 +22,21 @@
             .ui-page {
                 background: transparent;
             }
-            .ui-content{
+            .ui-content {
                 background: transparent;
             }
+            .ui-content-transparent {
+                background-color: rgba(0, 0, 0, 0.25);
+            }
+
+            .ui-content p {
+                color: #fff;
+            }
+
+            .ui-content label {
+                color: #fff;
+            }
+
         </style> 
 
         <!-- META -->
@@ -34,7 +46,7 @@
         <title>Wordplacer</title>
     </head>
     <body>
-        <div data-role="page" id="main">
+        <div data-role="page" class="ui-content-transparent" id="main">
             <div data-role="header">
                 <h1>Wordplacer</h1>
             </div>
@@ -60,7 +72,7 @@
                 <button onClick="loadAndRenderWords()">Spice up my words!</button>
             </div>
         </div>
-        <div data-role="page" id="results">
+        <div data-role="page" class="ui-content-transparent" id="results">
             <div data-role="header">
                 <h1>Results</h1>
             </div>
