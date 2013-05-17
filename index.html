@@ -1,0 +1,124 @@
+<DOCTYPE html>
+<html>
+    <head>
+        <!-- IMPORTS -->
+        <link rel="stylesheet"
+        href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css"
+        />
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script
+            src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+        
+        <!-- CUSTOM -->
+        <script src="handlers.js"></script>
+        <style type="text/css">
+            body {
+                background: url(http://www.inquirelive.co.uk/wp-content/uploads/2013/04/book.gif);
+                background-repeat:repeat-y;
+                background-position:center center;
+                background-attachment:scroll;
+                background-size:100% 100%;
+            }
+            .ui-page {
+                background: transparent;
+            }
+            .ui-content{
+                background: transparent;
+            }
+        </style> 
+
+        <!-- META -->
+
+        <!-- DATA -->
+        <title>Wordplacer</title>
+    </head>
+    <body>
+        <div data-role="page" id="main">
+            <div data-role="header">
+                <h1>Wordplacer</h1>
+            </div>
+            <div data-role="content">
+                <label for="replace-for">Replace occurrences of:</label>
+                <input type="text" name="replace-of" id="replace-of" />
+
+                <label for="replace-with">With:</label>
+                <input type="text" name="replace-with" id="replace-with" />
+
+                <label for="replace-where">At:</label>
+                <select name="replace-where" id="replace-where">
+                    <option value="beginning">The beginning of the word</option>
+                    <option value="end">The end of the word</option>
+                    <option value="anywhere">Anywhere</option>
+                </select>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <button onClick="loadAndRenderWords()">Spice up my words!</button>
+            </div>
+        </div>
+        <div data-role="page" id="results">
+            <div data-role="header">
+                <h1>Results</h1>
+            </div>
+            <div data-role="content">
+                <ul data-role="list-view" id="words">
+                    <!-- Dynamically generated word content goes here -->
+                </ul>
+            </div>
+        </div>
+    </body>
+    <script>
+    var makeQuery = function(rof, rwith, rwhere) {
+        var query = "?rwhere=" + rwhere;
+        if (rof || rwith) {
+            query += "&";
+            if (rof) {
+                query += "rof=" + rof;
+                if (rwith) query += "&";
+            }
+            if (rwith)
+                query += "rwith=" + rwith;
+        }
+        return query;
+    }
+
+    var loadAndRenderWords = function() {
+        var rof = $("#replace-of").val();
+        var rwith = $("#replace-with").val();
+        var rwhere = $("#replace-where").val();
+
+        var query = makeQuery(rof, rwith, rwhere);
+        $.getJSON("http://localhost:8888/words" + query, function(data) {
+            if (data.error) {
+                console.log(data.error);
+                return;
+            }
+            $.mobile.changePage("#results");
+            renderWords(data, function(rendered) {
+                $("#words").html(rendered);
+                $("#words").listview();
+            });
+        });
+    };
+
+    var renderWords = function(words, callback) {
+        var html = "";
+
+        $.each(words, function(index, word) {
+            html += renderWord(word);
+            if (index === words.length-1)
+                callback(html);
+        });
+    };
+
+    var renderWord = function(word) {
+        return "<li>" + word + "</li>";
+    };
+    </script>
+</html>
