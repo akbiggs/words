@@ -100,7 +100,7 @@
         var rwhere = $("#replace-where").val();
 
         var query = makeQuery(rof, rwith, rwhere);
-        $.getJSON("http://localhost:8888/words" + query, function(data) {
+        $.getJSON("http://shrouded-brushlands-6824.herokuapp.com/words" + query, function(data) {
             if (data.error) {
                 console.log(data.error);
                 return;
